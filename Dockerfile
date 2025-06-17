@@ -1,4 +1,4 @@
-FROM denoland/deno:latest as builder
+FROM denoland/deno:latest AS builder
 WORKDIR /app
 COPY . .
 RUN deno cache src/main.ts
