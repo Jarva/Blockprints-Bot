@@ -10,6 +10,9 @@ app.use(logger());
 
 app.mount("/api/discord", handler);
 app.route("/", api);
-app.get("*", (c) => c.text("Hello, World!"));
+app.get("/health", (c) => {
+  c.status(200);
+  return c.text("OK");
+});
 
 Deno.serve(app.fetch);
