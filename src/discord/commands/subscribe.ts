@@ -7,6 +7,7 @@ import {
   Permission,
 } from "npm:@buape/carbon";
 import { addSubscription, Subscription } from "../../database/main.ts";
+import {Result} from "npm:typescript-result@3.1.1";
 
 export class SubscribeCommand extends Command {
   name = "subscribe";
@@ -43,7 +44,15 @@ export class SubscribeCommand extends Command {
         mod.trim()
       ) ?? [];
 
-    const report = await interaction.options.getChannel("report");
+    const [report, channelError] = await Result.fromAsyncCatching(
+      interaction.options.getChannel("report")
+    ).toTuple();
+
+    if (channelError) {
+      return interaction.reply({
+        content: "Unable to access report channel"
+      });
+    }
 
     const subscription: Subscription = {
       channel: interaction.channel!.id,
